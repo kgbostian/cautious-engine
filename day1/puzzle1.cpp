@@ -23,14 +23,12 @@ int solve_puzzle(const std::vector<int> &input_vector)
     std::vector<int> duplicates;
     duplicates.push_back(frequency);
     int size = input_vector.size();
-    int i = 20;
+    int i = 200;
     while(i-- > 0)
     {
-        printf("\r\nLooping on data again.\r\n");
         for(int i = 0; i < size; i++)
         {
             frequency += input_vector[i];
-            printf("%d\r\n", frequency);
             if(check_dup(frequency, duplicates))
             {
                 return frequency;
