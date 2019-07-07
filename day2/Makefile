@@ -2,11 +2,14 @@
 all: clean build run
 
 build:
-	g++ puzzle1.cpp
+	g++ -g puzzle2.cpp -o Day2
 
-run: a.out
-	./a.out
+run: Day2
+	./Day2
 
 clean:
 	rm -f temp
-	rm -f a.out
+	rm -f Day2
+
+debug: Day2
+	gdb Day2
