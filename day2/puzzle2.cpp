@@ -4,63 +4,61 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <array>
 
 typedef std::vector<std::string>::iterator iter;
 typedef std::vector<std::string>::const_iterator citer;
 typedef std::vector<std::string> vstring;
 
 void read_input_file(std::string file_name, vstring &input_vector);
-int solve_puzzle(vstring &input_vector);
+std::string solve_puzzle(vstring &input_vector);
 
 
 int main()
 {
     vstring input;
     read_input_file("input", input);
-    printf("\r\n%d\r\n", solve_puzzle(input));
+    std::cout << solve_puzzle(input) << std::endl;
     return 0;
 }
 
-int solve_puzzle(vstring &input_vector)
+std::string solve_puzzle(vstring &input_vector)
 {
-    int number_of_twos = 0;
-    int number_of_threes = 0;
-    for(iter it = input_vector.begin(); it != input_vector.end(); ++it)
+    vstring copy_vector = vstring(input_vector);
+    std::vector<std::array<std::string, 2>> all_results;
+    std::array<std::string,2> results;
+    int index = 0;
+    bool done = false;
+    for(iter cit = input_vector.begin(); cit != input_vector.end(); ++cit)
     {
-        std::string line = *it;
-        bool firstPair = true;
-        bool firstTriplet = true; 
-        while(line.size() > 0)
+        vstring copy_vector = vstring(input_vector);
+        copy_vector.erase(std::find(copy_vector.begin(), copy_vector.end(),(*cit)));
+        for(iter it = copy_vector.begin(); it != copy_vector.end(); ++it)
         {
-            char character = line.at(0);
-            int count = std::count(line.begin(), line.end(), character);
-            //printf("Countings %c's: %d\r\n", character, count);
-            //printf("Size of line: %d\r\n", line.size());
-            //printf("Contents of line: %s\r\n", line.c_str());
-            for(int i = 0; i < count; i++)
-            {    
-                line.erase(line.find(character, 0), 1);
-            }
-            //printf("Size of line after removal: %d\r\n", line.size());
-            if(count == 2 && firstPair)
+            int diff = 0;
+            for(int i = 0; i < (*it).size(); i++)
             {
-                number_of_twos++;
-                firstPair = false;
-                //printf("There are two.");
+                if((*cit).at(i) != (*it).at(i))
+                {
+                    diff++;
+                    index = i;
+                }
+                if(diff > 1)
+                    break;
             }
-            else if(count == 3 && firstTriplet)
+            if(diff == 1)
             {
-                number_of_threes++;
-                firstTriplet = false;
-                //printf("There are three.");
-            }
-            if(firstPair == false && firstTriplet == false)
+                results[0] = (*cit);
+                results[1] = (*it);
+                all_results.push_back(results);
+                done = true;
                 break;
-        }
-        //printf("End line processing.\r\n");
-        printf("Number of 2s: %d\r\nNumber of 3s: %d\r\n", number_of_twos, number_of_threes);
-    }   
-    return number_of_twos * number_of_threes;
+            }
+        } 
+        if(done)
+            break;
+   }
+   return results[1].erase(index,1);
 }
 
 void read_input_file(std::string file_name, std::vector<std::string> &input_vector)
