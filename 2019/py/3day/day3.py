@@ -92,6 +92,15 @@ def find_intersection_pts(red, blue):
         if blue.count(x) > 0:
             x_pts.append(x)
 
+def distance(xpts, red_pts, blue_pts):
+    all_dis = []
+    for x in xpts:
+        #Plus 2 for zero-based index on .index
+        all_dis.append(red_pts.index(x) + blue_pts.index(x))
+    all_dis.remove(0)
+    print(all_dis)
+    return min(all_dis)
+
 def part1(filename="input.data"):
     lines = read_file(filename)
     red,blue = parse_lines(lines)
@@ -102,9 +111,9 @@ def part1(filename="input.data"):
     red_set = set(all_red_points)
     blue_set = set(all_blue_points)
     x_pts = red_set.intersection(blue_set)
-    md = manhattan_distance(x_pts)
-    set_md = set(md)
-    set_md.remove(0)
-    print(min(set_md))
+    md = distance(x_pts, all_red_points, all_blue_points)
+    #set_md = set(md)
+    #set_md.remove(0)
+    print(md)
 
 part1("input.data")
